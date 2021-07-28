@@ -1,27 +1,33 @@
+#datacenter name
 data "vsphere_datacenter" "dc" {
   name = "MarkpsmiDC"
 }
 
+#datastore in which the vm is deployed
 data "vsphere_datastore" "datastore" {
   name          = "UCSDMarksmiBIGDS292"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+#cluster
 data "vsphere_compute_cluster" "cluster" {
   name          = "MarkpsmiCL"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+#standard switch/dvs port-group name
 data "vsphere_network" "network" {
   name          = "VM Network"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+#vm template name
 data "vsphere_virtual_machine" "template" {
   name          = "CentOS7-Temp"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+#new VM description
 resource "vsphere_virtual_machine" "vm" {
   name             = var.vm_name
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
